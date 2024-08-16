@@ -3,7 +3,7 @@ import socketserver
 import webbrowser
 import threading
 
-PORT = 8000
+PORT = 8080
 DIRECTORY = "."
 
 class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
