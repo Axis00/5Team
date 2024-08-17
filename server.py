@@ -11,9 +11,9 @@ class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 
 def start_server():
-    with socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler) as httpd:
+    with socketserver.TCPServer(("", PORT), CustomHTTPRequestHandler) as https:
         print(f"Serving at http://localhost:{PORT}")
-        httpd.serve_forever()
+        https.serve_forever()
 
 # Start the server in a separate thread
 threading.Thread(target=start_server).start()
