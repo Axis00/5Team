@@ -12,6 +12,13 @@ const questions = [
     { question: "콘서트를 가게되었다.", option1: "고막이 사르르녹는 노래", option2: "낭만 넘치는 밴드" }
 ];
 
+// 추가된 이미지 URL 배열
+const imageUrls = [
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F109%2F2017%2F05%2F09%2F0003532881_006_20170509105114141.jpg&type=sc960_832",  // 예시 URL 1
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20151103_281%2Fcombi444_1446555770592K7rCb_JPEG%2Fa0131.jpg&type=sc960_832",  // 예시 URL 2
+    // 필요한 만큼 URL 추가
+];
+
 let currentQuestionIndex = 0;
 
 function loadQuestion() {
@@ -19,6 +26,17 @@ function loadQuestion() {
     document.getElementById("question").textContent = currentQuestion.question;
     document.getElementById("option1").textContent = currentQuestion.option1;
     document.getElementById("option2").textContent = currentQuestion.option2;
+    
+    // 이미지 URL 설정 (예: 현재 질문 인덱스와 관련된 이미지 URL 설정)
+    const imageUrl = imageUrls[currentQuestionIndex % imageUrls.length]; // 예시로 현재 질문 인덱스에 따라 이미지 URL 설정
+    const displayedImage = document.getElementById("displayedImage");
+    
+    if (imageUrl) {
+        displayedImage.src = imageUrl;
+        displayedImage.style.display = "block";
+    } else {
+        displayedImage.style.display = "none";
+    }
 }
 
 document.getElementById("option1").addEventListener("click", function() {
@@ -30,7 +48,11 @@ document.getElementById("option2").addEventListener("click", function() {
 });
 
 function handleOptionSelection(option) {
-    console.log(`선택한 옵션: ${option}`);
+    // 선택한 옵션을 UI에 표시
+    const feedbackElement = document.getElementById('feedback');
+    feedbackElement.textContent = `선택한 옵션: ${option}`;
+    
+    // 다음 질문으로 이동
     nextQuestion();
 }
 
