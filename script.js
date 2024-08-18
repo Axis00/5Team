@@ -14,8 +14,17 @@ const questions = [
 
 // 추가된 이미지 URL 배열
 const imageUrls = [
-    "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F109%2F2017%2F05%2F09%2F0003532881_006_20170509105114141.jpg&type=sc960_832",  // 예시 URL 1
-    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20151103_281%2Fcombi444_1446555770592K7rCb_JPEG%2Fa0131.jpg&type=sc960_832",  // 예시 URL 2
+    "https://img2.quasarzone.co.kr/img/data/img/editor/1901/1901___1441657643.jpg",  //1번 이미지 URL
+    "https://storage.enuri.info/pic_upload/knowbox2/06110565020180221b04978b3-f080-423a-bb40-90ea71c432b8.jpg",  //2번 이미지 URL
+    "https://t2.daumcdn.net/thumb/R720x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/aZWV/image/K7YGZ01YOZoN4ALZjbHZfxyDOq0.jpg",  //3번 이미지 URL
+    "https://img.freepik.com/photos-premium/king-throne-illustration-image-generative-ai_800563-7624.jpg",  //4번 이미지 URL
+    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fcdn.crowdpic.net%2Fdetail-thumb%2Fthumb_d_C96635080296322668EC8E84CAF0B1C4.jpg&type=sc960_832",  //5번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F109%2F2017%2F05%2F09%2F0003532881_006_20170509105114141.jpg&type=sc960_832",  // 6번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MDNfMTcg%2FMDAxNjkzNzE2OTgwNDMw.6rDpcZvu--iIgtkAsTMwtGaAis0JmkTIqA6JQaOq_Jcg.b4vC7WHzqNgswJS1X8BrK3ql9K4QEuV944O78tyh-Hgg.PNG.iser777a%2FIMG_4655.png&type=sc960_832",  // 7번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20140526_37%2Fntm55_1401031145685a7ruP_PNG%2F-739393247.png&type=sc960_832",  // 8번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fcafefiles.naver.net%2F20091104_44%2Fdlsrbdnwjd_1257340505132fKDqU_jpg%2F222_elayts_dlsrbdnwjd.jpg&type=sc960_832",  // 9번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxNzA5MjdfNzMg%2FMDAxNTA2NDkwNTE4NDY5.Urxp4Nrsj5Wlh_k1uWtbVIunF7n3YOASlwa4xXk71Qcg.eCwqosRNxSi2Fof5BvPfL8PbFCJIIIqt1dKesjJrXigg.GIF.wo09765%2F%25C2%25A9.gif&type=sc960_832_gif",  // 10번 이미지 URL
+    "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20151123_23%2Fponponkarin_1448220578431jm1Fm_JPEG%2FNaverBlog_20151123_042938_39.jpg&type=sc960_832",  // 11번 이미지 URL
     // 필요한 만큼 URL 추가
 ];
 
