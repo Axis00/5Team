@@ -14,6 +14,7 @@ body {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* 이미지 배치를 위해 상대 위치 설정 */
 }
 
 h1 {
@@ -27,7 +28,7 @@ h1 {
 
 .choices {
     display: flex;
-    flex-direction: column; /* 가로에서 세로로 변경 */
+    flex-direction: column;
     gap: 20px;
 }
 
@@ -44,4 +45,17 @@ h1 {
 
 .choice-btn:hover {
     background-color: #45a049;
+}
+
+#imageContainer {
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    margin-bottom: 20px; /* 이미지와 질문 사이에 여백 추가 */
+}
+
+#displayedImage {
+    max-width: 100%;
+    height: auto; /* 이미지 비율 유지 */
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
