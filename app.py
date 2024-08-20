@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///music.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# 음악 모델 정의
+# 음악 DB 모델 정의
 class Music(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
@@ -86,7 +86,11 @@ def recommend():
     all_music = Music.query.all()
     if all_music:
         random_music = random.choice(all_music)
-        return render_template('recommend.html', music=random_music)
+        video_id = extract_video_id(random_music.youtube_url)
+        if video_id:
+            return render_template('recommend.html', music=random_music, video_id=video_id)
+        else:
+            return "Invalid YouTube URL.", 400
     else:
         return "No music found in the database.", 404
 
