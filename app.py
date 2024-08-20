@@ -4,6 +4,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from pytube import Search
 import random
+from urllib.parse import urlparse, parse_qs
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///music.db'
@@ -36,6 +37,20 @@ def find_youtube_url(title, artist):
         return search.results[0].watch_url
     return None
 
+#유튜브 URL에서 비디오 ID 추출
+def extract_video_id(youtube_url):
+    parsed_url = urlparse(youtube_url)
+    if parsed_url.hostname == 'youtu.be':
+        return parsed_url.path[1:]
+    elif parsed_url.hostname in ('www.youtube.com', 'youtube.com'):
+        if parsed_url.path == '/watch':
+            return parse_qs(parsed_url.query).get('v', [None])[0]
+        elif parsed_url.path.startswith('/embed/'):
+            return parsed_url.path.split('/')[2]
+        elif parsed_url.path.startswith('/v/'):
+            return parsed_url.path.split('/')[2]
+    return None
+
 # 홈 페이지 및 음악 추가 기능
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -54,8 +69,10 @@ def index():
             new_music = Music(title=title, artist=artist, youtube_url=youtube_url)
             db.session.add(new_music)
             db.session.commit()
+            message = f"'{title}' by '{artist}' has been added successfully!"
         else:
-            return "YouTube URL not found", 404
+            message = "YouTube URL not found. Please try again or provide the URL manually."
+            return render_template('index.html', music_list=Music.query.all(), message=message)
         
         return redirect(url_for('index'))
     
