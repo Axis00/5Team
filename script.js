@@ -57,9 +57,6 @@ document.getElementById("option2").addEventListener("click", function() {
 });
 
 function handleOptionSelection(option) {
-    // 선택한 옵션을 UI에 표시
-    const feedbackElement = document.getElementById('feedback');
-    feedbackElement.textContent = `선택한 옵션: ${option}`;
     
     // 다음 질문으로 이동
     nextQuestion();
