@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,5 +20,42 @@
         <div id="feedback"></div>
     </div>
     <script src="script.js"></script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음악 취향 테스트</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 메인 화면 -->
+    <div id="main">
+        <h1>음악 취향 테스트</h1>
+        <button onclick="begin()">테스트 시작</button>
+    </div>
+
+    <!-- 질문과 선택지 화면 -->
+    <!-- 질문과 선택지 화면 -->
+     <div id="qna" style="display:none;">
+        <div class="statusBar"></div>
+        <div class="qBox"></div>
+        <div class="imageContainer">
+            <img id="questionImage" alt="Question Image" style="display:none;">
+        </div>
+        <div class="answerBox"></div>
+    </div>
+
+
+    <!-- 결과 화면 -->
+    <div id="result" style="display:none;">
+        <h2 class="resultname"></h2>
+        <div id="resultImg"></div>
+        <p class="resultDesc"></p>
+    </div>
+
+    <script src="scripts.js"></script>
 </body>
 </html>
