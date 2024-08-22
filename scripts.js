@@ -4,13 +4,14 @@ const result = document.querySelector("#result");
 let pos = 11;
 const endPoint = 11;
 const select = [0, 0, 0, 0, 0, 0, 0, 0];
-//E0 I1 S2 N3 T4 F5 J6 P7
 var i = 0;
-//AGE SEX 1 2 3 4 5 6 7
+
+// 음악 취향 계산하는 함수
 function calResult() {
 	console.log(select);
 	/*select.sort();*/
 
+	// 큰 값 반환
 	if (select[0] == Math.max(select[0], select[1])) {
 		var result1 = 0;
 	}
@@ -39,12 +40,15 @@ function calResult() {
 		var result4 = 7;
 	}
 
+	// 네 가지 성향 합쳐서 최종 취향 결정 후 반환
 	var str_res = result1.toString() + result2.toString() + result3.toString() + result4.toString();
 	return str_res;
 }
 
+// 취향별 결과 페이지로 리디렉션하는 함수
 function setResult() {
 	let point = calResult();
+
 	if (point == '0246') { pos = 0; }
 	else if (point == '0247') { pos = 1; }
 	else if (point == '0256') { pos = 2; }
@@ -90,7 +94,7 @@ function setResult() {
 	const resultDesc = document.querySelector('.resultDesc');
 	resultDesc.innerHTML = infoList[pos].desc;
 }
-	
+	// 마지막 질문에서 결과 페이지로 이동하기 위해 setResult() 호출
 	function goResult() {
 		/*qna.style.WebkitAnimation = "fadeOut 1s";
 		qna.style.animation = "fadeOut 1s";
@@ -106,6 +110,7 @@ function setResult() {
 		setResult();
 	}
 	
+	// 답변 버튼 생성, 다음 질문으로 이동하는 함수
 	function addAnswer(answerText, qIdx, idx) {
 		var a = document.querySelector('.answerBox');
 		var answer = document.createElement('button');
@@ -148,6 +153,7 @@ function setResult() {
 	}, false);
 	}
 	
+	// 다음 질문으로 이동하는 함수, 마지막 질문이면 goResult()로 이동
 	function goNext(qIdx) {
 		if (qIdx === endPoint) {
 			goResult();
@@ -163,6 +169,7 @@ function setResult() {
 		status.style.width = (100 / endPoint) * (qIdx + 1) + '%';
 	}
 	
+	// 처음 시작하는 함수
 	function begin() {
 		sessionStorage.clear();
 		main.style.WebkitAnimation = "fadeOut 1s";
@@ -180,9 +187,6 @@ function setResult() {
 			goNext(qIdx);
 	}, 450);
 }
-
-//E0 I1 S2 N3 T4 F5 J6 P7
-
 
 const qnaList = [
 
