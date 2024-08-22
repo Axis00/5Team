@@ -11,7 +11,7 @@ body {
 }
 
 .statusBar {
-  width: 0;
+  width: 100%;
   height: 5px;
   background-color: #4caf50;
   margin-bottom: 20px;
@@ -19,13 +19,14 @@ body {
 
 .qBox {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .answerBox {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 30px;
 }
 
 .answerList {
@@ -54,8 +55,35 @@ body {
   font-size: 18px;
 }
 
-img.img-fluid {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
+/* 이미지 크기를 절대적으로 고정 */
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+#questionImage, #resultImg img {
+  width: 600px; /* 고정 너비 */
+  height: 400px; /* 고정 높이 */
+  object-fit: cover; /* 비율 유지 및 크기에 맞게 자르기 */
+  display: block;
+  margin: 30px auto;
+}
+
+button {
+  display: block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative; /* 위치 조정을 위한 상대적 위치 설정 */
+  margin: 20px auto;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
