@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -7,7 +7,6 @@ import random
 from urllib.parse import urlparse, parse_qs
 import pandas as pd
 import os
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///music.db'
@@ -24,7 +23,7 @@ class Music(db.Model):
 
     def __repr__(self):
         return f'<Music {self.title} by {self.artist} in {self.genre}>'
-    
+
 # Flask-Admin 설정
 admin = Admin(app, name='MusicDB Admin', template_mode='bootstrap3')
 admin.add_view(ModelView(Music, db.session))
@@ -33,7 +32,7 @@ admin.add_view(ModelView(Music, db.session))
 with app.app_context():
     db.create_all()
 
-#노래 제목과 아티스트 이름으로 YouTube URL 검색
+# 노래 제목과 아티스트 이름으로 YouTube URL 검색
 def find_youtube_url(title, artist):
     query = f"{title} {artist} official"
     search = Search(query)
@@ -41,7 +40,7 @@ def find_youtube_url(title, artist):
         return search.results[0].watch_url
     return None
 
-#유튜브 URL에서 비디오 ID 추출
+# 유튜브 URL에서 비디오 ID 추출
 def extract_video_id(youtube_url):
     parsed_url = urlparse(youtube_url)
     if parsed_url.hostname == 'youtu.be':
@@ -54,6 +53,19 @@ def extract_video_id(youtube_url):
         elif parsed_url.path.startswith('/v/'):
             return parsed_url.path.split('/')[2]
     return None
+
+# 엑셀 파일에서 데이터를 읽어와 데이터베이스에 추가
+def load_data_from_excel(file_path):
+    df = pd.read_excel(file_path)
+    for _, row in df.iterrows():
+        music = Music(
+            title=row['제목'],
+            artist=row['아티스트'],
+            genre=row['장르'],
+            youtube_url=row['유튜브url']
+        )
+        db.session.add(music)
+    db.session.commit()
 
 # 홈 페이지 및 음악 추가 기능
 @app.route('/', methods=['GET', 'POST'])
@@ -97,21 +109,25 @@ def recommend():
             return "Invalid YouTube URL.", 400
     else:
         return "No music found in the database.", 404
-    
+
 # 엑셀 파일 업로드 기능
 @app.route('/import')
-def import_data():
-    try:
-        df = pd.read_excel('music_data.xlsx')
-        for index, row in df.iterrows():
-            new_music = Music(genre=row['Genre'], title=row['Title'], artist=row['Artist'], youtube_url=row['YouTube URL'])
-            db.session.add(new_music)
-        db.session.commit()
-        return "Data imported from music_data.xlsx"
-    except Exception as e:
-        return f"An error occurred: {e}"
+def upload_excel():
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part'}), 400
 
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
 
+    if file and file.filename.endswith('.xlsx'):
+        file_path = 'temp.xlsx'
+        file.save(file_path)
+        load_data_from_excel(file_path)
+        os.remove(file_path)  # 사용 후 임시 파일 삭제
+        return jsonify({'message': 'Data loaded successfully!'}), 200
+    else:
+        return jsonify({'message': 'Invalid file format!'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -14,7 +14,8 @@
             margin-bottom: 40px;
         }
         input[type="text"],
-        input[type="url"] {
+        input[type="url"],
+        select {
             width: 300px;
             padding: 10px;
             margin: 5px;
@@ -76,6 +77,14 @@
         <input type="text" name="title" placeholder="Song Title" required><br>
         <input type="text" name="artist" placeholder="Artist Name" required><br>
         <input type="url" name="youtube_url" placeholder="YouTube URL (Optional)"><br>
+        <select name="genre" required>
+            <option value="" disabled selected>Select Genre</option>
+            <option value="ballad">ballad</option>
+            <option value="dance">dance</option>
+            <option value="hip-hop">hip-hop</option>
+            <option value="rock">rock</option>
+            <!-- 추가적인 장르를 여기서 선택 가능 -->
+        </select><br>
         <button type="submit">Add Music</button>
     </form>
 
@@ -83,7 +92,7 @@
     <ul class="music-list">
         {% for music in music_list %}
         <li class="music-item">
-            {{ music.title }} by {{ music.artist }} - 
+            {{ music.title }} by {{ music.artist }} ({{ music.genre }}) - 
             <a href="{{ music.youtube_url }}" target="_blank">Listen</a>
         </li>
         {% else %}
