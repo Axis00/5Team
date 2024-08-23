@@ -60,6 +60,23 @@ function setResult() {
 	resultName.innerHTML = infoList[pos].name;
 	console.log();
 	
+	let url;
+    switch (pos) {
+        case 0:
+            url = `http://127.0.0.1:5500/5Team/result_ballad.html`;
+            break;
+        case 1:
+            url = `http://127.0.0.1:5500/5Team/result_band.html`;
+            break;
+        case 2:
+            url = `http://127.0.0.1:5500/5Team/result_dance.html`;
+            break;
+        case 3:
+            url = `http://127.0.0.1:5500/5Team/result_hiphop.html`;
+            break;
+        default:
+            break;
+    }
 	// var str = "";
 	// for (var j = 0; j < 10; j++) {
 	// 	str += sessionStorage.getItem("data_" + j).toString(); // 저장
@@ -70,7 +87,7 @@ function setResult() {
 	// str2 = parseInt(str2)+2715;
 	// str= String(str1)+String(str2);
 	// location.href = window.location.protocol + "//" + window.location.host + '/result.html?'+point;
-	location.href = `http://localhost:8080/result.html?point=${point}`;
+	location.href = url;
 
 	/*var resultImg = document.createElement('img');
 	const imgDiv = document.querySelector('#resultImg');
