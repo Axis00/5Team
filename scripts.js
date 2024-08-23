@@ -63,16 +63,16 @@ function setResult() {
 	let url;
     switch (pos) {
         case 0:
-            url = `http://127.0.0.1:5500/5Team/result_ballad.html`;
+            url = `result_ballad.html`;
             break;
         case 1:
-            url = `http://127.0.0.1:5500/5Team/result_band.html`;
+            url = `result_band.html`;
             break;
         case 2:
-            url = `http://127.0.0.1:5500/5Team/result_dance.html`;
+            url = `result_dance.html`;
             break;
         case 3:
-            url = `http://127.0.0.1:5500/5Team/result_hiphop.html`;
+            url = `result_hiphop.html`;
             break;
         default:
             break;
