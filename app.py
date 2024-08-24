@@ -117,17 +117,18 @@ def result():
             db.session.add(new_music)
             db.session.commit()
 
+            # 메시지를 HTML 안전하게 표시하기 위해 f-string 사용
             message = f"'{title}' by '{artist}' has been added successfully!"
+            success = True
         else:
             message = "YouTube URL not found. Please try again or provide the URL manually."
-            return render_template('result.html', genre=genre, music=None, video_id=None, message=message)
+            success = False
 
         # 기존의 추천곡 표시
-        # music_list = Music.query.filter_by(genre=genre).all()
-        # random_music = random.choice(music_list) if music_list else None
-        # video_id = extract_video_id(random_music.youtube_url) if random_music else None
-
-        return render_template('result.html', genre=genre, music=random_music, video_id=video_id, message=message)
+        music_list = Music.query.filter_by(genre=genre).all()
+        random_music = random.choice(music_list) if music_list else None
+        video_id = extract_video_id(random_music.youtube_url) if random_music else None
+        return render_template('result.html', genre=genre, music=random_music, video_id=video_id, message=message, success=success)
 
     else:
         # GET 요청의 경우
@@ -148,6 +149,8 @@ def result():
 
         return render_template('result.html', genre=genre, music=random_music, video_id=video_id)
 
+
+
 # 홈 페이지 및 음악 추가 기능
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -166,7 +169,7 @@ def index():
             new_music = Music(title=title, artist=artist, genre=genre, youtube_url=youtube_url)  # 장르 포함
             db.session.add(new_music)
             db.session.commit()
-            message = f"'{title}' by '{artist}' in genre '{genre}' has been added successfully!"
+            message = f"'{title}' by '{artist}' has been added successfully!"
         else:
             message = "YouTube URL not found. Please try again or provide the URL manually."
             return render_template('index.html', music_list=Music.query.all(), message=message)
@@ -181,8 +184,6 @@ def index():
 @app.route('/main', methods=['GET', 'POST'])
 def main():
     return render_template('main.html')
-
-
 
 
 if __name__ == '__main__':

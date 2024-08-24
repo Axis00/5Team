@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommended Song</title>
+    <title>Your Music Preference</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,7 +37,7 @@
             text-decoration: underline;
         }
         form {
-            margin-top: 40px;
+            margin-top: 30px;
         }
         input[type="text"],
         input[type="url"] {
@@ -61,32 +62,29 @@
     </style>
 </head>
 <body>
-    <h1>Your Music Preference is {{ genre }}!</h1>
-
-    {% if video_id %}
+    <h1>당신을 위한 추천 음악은</h1> <!--{{ genre }}-->
     <div class="video-container">
         <iframe src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
     </div>
     <div class="song-info">
         <p><strong>{{ music.title }}</strong> by <em>{{ music.artist }}</em></p>
     </div>
-    {% else %}
-    <p>No recommendations available in this genre.</p>
-    {% endif %}
+    <a href="{{ url_for('main') }}" class="back-link">← 테스트 페이지로 돌아가기</a>
 
-    <h2>Recommend a Similar Song!</h2>
+    <h2>Recommend a similar song!</h2>
     <form method="POST" action="{{ url_for('result') }}">
         <input type="text" name="title" placeholder="Song Title" required><br>
         <input type="text" name="artist" placeholder="Artist Name" required><br>
         <input type="url" name="youtube_url" placeholder="YouTube URL (Optional)"><br>
-        <input type="hidden" name="genre" value="{{ genre }}"><br>
-        <button type="submit">Add Song</button>
+        <input type="hidden" name="genre" value="{{ genre }}">
+        <button type="submit">Add Music</button>
     </form>
 
+    <!-- JavaScript to display a popup message if it exists -->
     {% if message %}
-    <div class="message">{{ message }}</div>
+    <script>
+        alert("{{ message|safe }}");
+    </script>
     {% endif %}
-
-    <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
 </body>
 </html>
