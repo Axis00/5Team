@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -55,6 +55,168 @@ def extract_video_id(youtube_url):
             return parsed_url.path.split('/')[2]
     return None
 
+
+# 랜덤 추천 기능
+@app.route('/recommend')
+def recommend():
+    all_music = Music.query.all()
+    if all_music:
+        random_music = random.choice(all_music)
+        video_id = extract_video_id(random_music.youtube_url)
+        if video_id:
+            return render_template('recommend.html', music=random_music, video_id=video_id)
+        else:
+            return "Invalid YouTube URL.", 400
+    else:
+        return "No music found in the database.", 404
+    
+# 엑셀 파일 업로드 기능
+@app.route('/import')
+def import_data():
+    try:
+        df = pd.read_excel('music_data.xlsx')
+        for index, row in df.iterrows():
+            new_music = Music(genre=row['Genre'], title=row['Title'], artist=row['Artist'], youtube_url=row['YouTube URL'])
+            db.session.add(new_music)
+        db.session.commit()
+        return "Data imported from music_data.xlsx"
+    except Exception as e:
+        return f"An error occurred: {e}"
+    
+# 장르별 랜덤 음악 가져오기
+@app.route('/get_random_music')
+def get_random_music():
+    genre = request.args.get('genre')
+    music = Music.query.filter_by(genre=genre).all()
+    if music:
+        random_music = random.choice(music)
+        video_id = extract_video_id(random_music.youtube_url)
+        return jsonify({'title': random_music.title, 'artist': random_music.artist, 'youtube_id': video_id})
+    else:
+        return jsonify({'error': 'No music found for the selected genre'}), 404
+
+#결과페이지 
+# @app.route('/result', methods=['GET', 'POST'])
+# def result():
+#     if request.method == 'POST':
+#         title = request.form['title']
+#         artist = request.form['artist']
+#         youtube_url = request.form['youtube_url']
+#         genre = request.form['genre']  # 사용자 결과에 따른 장르
+
+#         # 사용자가 유튜브 URL을 입력하지 않은 경우, 검색
+#         if not youtube_url:
+#             youtube_url = find_youtube_url(title, artist)
+        
+#         # 새 곡을 장르에 맞춰 데이터베이스에 추가
+#         if youtube_url:
+#             new_music = Music(title=title, artist=artist, youtube_url=youtube_url, genre=genre)
+#             db.session.add(new_music)
+#             db.session.commit()
+#             message = f"'{title}' by '{artist}' has been added to the {genre} genre!"
+#         else:
+#             message = "YouTube URL not found. Please try again or provide the URL manually."
+#             return render_template('result.html', message=message)
+
+#     # 장르에 따른 추천곡을 랜덤으로 선택
+#     pos = sessionStorage.getItem("pos")  # 사용자의 결과에서 저장된 pos 값
+#     genre_map = {0: "Ballad", 1: "Band", 2: "Dance", 3: "Hip-hop"}
+#     genre = genre_map[int(pos)]
+    
+#     # 해당 장르의 음악 중에서 랜덤으로 추천
+#     music_list = Music.query.filter_by(genre=genre).all()
+#     random_music = random.choice(music_list) if music_list else None
+#     video_id = extract_video_id(random_music.youtube_url) if random_music else None
+    
+#     return render_template('result.html', genre=genre, music=random_music, video_id=video_id)
+
+# @app.route('/result', methods=['GET', 'POST'])
+# def result():
+#     if request.method == 'POST':
+#         pos = request.form.get('pos')  # 클라이언트에서 전송된 pos 값
+#         if pos is None:
+#             return "Invalid request: 'pos' is required.", 400
+        
+#         genre_map = {0: "Ballad", 1: "Band", 2: "Dance", 3: "Hip-hop"}
+#         try:
+#             genre = genre_map[int(pos)]
+#         except (ValueError, KeyError):
+#             return "Invalid 'pos' value.", 400
+        
+#         # 장르에 따른 추천곡을 랜덤으로 선택
+#         music_list = Music.query.filter_by(genre=genre).all()
+#         random_music = random.choice(music_list) if music_list else None
+#         video_id = extract_video_id(random_music.youtube_url) if random_music else None
+
+#         # 올바른 응답을 반환
+#         return render_template('result.html', genre=genre, music=random_music, video_id=video_id)
+
+#     return "Invalid request method.", 405
+# @app.route('/result', methods=['GET', 'POST'])
+# def result():
+#     if request.method == 'POST':
+#         title = request.form.get('title')
+#         artist = request.form.get('artist')
+#         youtube_url = request.form.get('youtube_url')
+#         genre = request.form.get('genre')
+
+#         if not title or not artist or not genre:
+#             return "Title, Artist, and Genre are required.", 400
+
+#         # 유튜브 URL이 없으면 자동으로 검색
+#         if not youtube_url:
+#             youtube_url = find_youtube_url(title, artist)
+
+#         # 음악 데이터베이스에 저장
+#         if youtube_url:
+#             new_music = Music(title=title, artist=artist, youtube_url=youtube_url, genre=genre)
+#             db.session.add(new_music)
+#             db.session.commit()
+
+#             message = f"'{title}' by '{artist}' has been added successfully!"
+#         else:
+#             message = "YouTube URL not found. Please try again or provide the URL manually."
+#             return render_template('result.html', genre=genre, music=None, video_id=None, message=message)
+
+#         # 기존의 추천곡 표시
+#         music_list = Music.query.filter_by(genre=genre).all()
+#         random_music = random.choice(music_list) if music_list else None
+#         video_id = extract_video_id(random_music.youtube_url) if random_music else None
+
+#         return render_template('result.html', genre=genre, music=random_music, video_id=video_id, message=message)
+
+#     # GET 요청의 경우
+#     pos = request.args.get('pos')  # sessionStorage의 pos 값을 쿼리 파라미터로 전달
+#     if pos is None:
+#         return "Invalid request: 'pos' is required.", 400
+
+#     genre_map = {0: "Ballad", 1: "Rock", 2: "Dance", 3: "Hip-hop"}
+#     try:
+#         genre = genre_map[int(pos)]
+#     except (ValueError, KeyError):
+#         return "Invalid 'pos' value.", 400
+
+#     # 장르에 따른 추천곡을 랜덤으로 선택
+#     music_list = Music.query.filter_by(genre=genre).all()
+#     random_music = random.choice(music_list) if music_list else None
+#     video_id = extract_video_id(random_music.youtube_url) if random_music else None
+
+#     return render_template('result.html', genre=genre, music=random_music, video_id=video_id)
+@app.route('/result', methods=['GET', 'POST'])
+def result():
+    if request.method == 'POST':
+        pos = request.form['pos']  # 클라이언트에서 전송된 pos 값
+        genre_map = {0: "Ballad", 1: "Rock", 2: "Dance", 3: "Hip-hop"}
+        genre = genre_map[int(pos)]
+        
+        # 장르에 따른 추천곡을 랜덤으로 선택
+        music_list = Music.query.filter_by(genre=genre).all()
+        random_music = random.choice(music_list) if music_list else None
+        video_id = extract_video_id(random_music.youtube_url) if random_music else None
+        
+        return render_template('result.html', genre=genre, music=random_music, video_id=video_id)
+
+
 # 홈 페이지 및 음악 추가 기능
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -84,32 +246,11 @@ def index():
     all_music = Music.query.all()
     return render_template('index.html', music_list=all_music)
 
-# 랜덤 추천 기능
-@app.route('/recommend')
-def recommend():
-    all_music = Music.query.all()
-    if all_music:
-        random_music = random.choice(all_music)
-        video_id = extract_video_id(random_music.youtube_url)
-        if video_id:
-            return render_template('recommend.html', music=random_music, video_id=video_id)
-        else:
-            return "Invalid YouTube URL.", 400
-    else:
-        return "No music found in the database.", 404
-    
-# 엑셀 파일 업로드 기능
-@app.route('/import')
-def import_data():
-    try:
-        df = pd.read_excel('music_data.xlsx')
-        for index, row in df.iterrows():
-            new_music = Music(genre=row['Genre'], title=row['Title'], artist=row['Artist'], youtube_url=row['YouTube URL'])
-            db.session.add(new_music)
-        db.session.commit()
-        return "Data imported from music_data.xlsx"
-    except Exception as e:
-        return f"An error occurred: {e}"
+# 메인 페이지
+@app.route('/main', methods=['GET', 'POST'])
+def main():
+    return render_template('main.html')
+
 
 
 

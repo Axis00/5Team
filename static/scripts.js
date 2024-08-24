@@ -49,53 +49,52 @@ function calResult() {
 function setResult() {
 	let point = calResult();
 
-	if (point == '0246' || point == '0247' || point == '0356' || point == '1246') { pos = 0; }
-	else if (point == '1357' || point == '1256' || point == '1467' || point == '1346') { pos = 1; }
-	else if (point == '0346' || point == '0347' || point == '1257' || point == '1247') { pos = 2; }
-	else if (point == '0257' || point == '0256' || point == '1356' || point == '0357') { pos = 3; }
+	if (point == '0246' || point == '0247' || point == '0356' || point == '1246') { pos = 0; } //발라드
+	else if (point == '1357' || point == '1256' || point == '1467' || point == '1346') { pos = 1; } //락
+	else if (point == '0346' || point == '0347' || point == '1257' || point == '1247') { pos = 2; } //댄스
+	else if (point == '0257' || point == '0256' || point == '1356' || point == '0357') { pos = 3; } //힙합
 	
 	sessionStorage.setItem("pos", pos); // 저장
+	// 폼 데이터를 생성하여 pos 값을 포함시킴
+	const form = document.createElement("form");
+	form.method = "POST";
+	form.action = "/result"; // result 페이지로 전송
 
-	const resultName = document.querySelector('.resultname');
-	resultName.innerHTML = infoList[pos].name;
-	console.log();
+	const posInput = document.createElement("input");
+	posInput.type = "hidden";
+	posInput.name = "pos";
+	posInput.value = pos;
+
+	form.appendChild(posInput);
+	document.body.appendChild(form);
+	form.submit(); // 폼 제출
+
+
+	// window.location.href = `/result`; // Flask 라우트로 리디렉션
+
+	// const resultName = document.querySelector('.resultname');
+	// resultName.innerHTML = infoList[pos].name;
+	// console.log();
 	
-	let url;
-    switch (pos) {
-        case 0:
-            url = `result_ballad.html`;
-            break;
-        case 1:
-            url = `result_band.html`;
-            break;
-        case 2:
-            url = `result_dance.html`;
-            break;
-        case 3:
-            url = `result_hiphop.html`;
-            break;
-        default:
-            break;
-    }
-	// var str = "";
-	// for (var j = 0; j < 10; j++) {
-	// 	str += sessionStorage.getItem("data_" + j).toString(); // 저장
-	// }
-	// var str1 = str.substr(0, 5);
-	// var str2 = str.substr(5, 5);	
-	// str1 = parseInt(str1)*3+126;
-	// str2 = parseInt(str2)+2715;
-	// str= String(str1)+String(str2);
-	// location.href = window.location.protocol + "//" + window.location.host + '/result.html?'+point;
-	location.href = url;
+	// let url;
+  //   switch (pos) {
+  //       case 0:
+  //           url = `result_ballad.html`;
+  //           break;
+  //       case 1:
+  //           url = `result_band.html`;
+  //           break;
+  //       case 2:
+  //           url = `result_dance.html`;
+  //           break;
+  //       case 3:
+  //           url = `result_hiphop.html`;
+  //           break;
+  //       default:
+  //           break;
+  //   }
 
-	/*var resultImg = document.createElement('img');
-	const imgDiv = document.querySelector('#resultImg');
-	var imgURL = 'image/' + point + '.png';
-	resultImg.src = imgURL;
-	resultImg.alt = point;
-	resultImg.classList.add('img-fluid');
-	imgDiv.appendChild(resultImg);*/
+	location.href = url;
 
 	const resultDesc = document.querySelector('.resultDesc');
 	resultDesc.innerHTML = infoList[pos].desc;
