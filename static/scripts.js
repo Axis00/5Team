@@ -55,9 +55,10 @@ function setResult() {
 	else if (point == '0257' || point == '0256' || point == '1356' || point == '0357') { pos = 3; } //힙합
 	
 	sessionStorage.setItem("pos", pos); // 저장
+
 	// 폼 데이터를 생성하여 pos 값을 포함시킴
 	const form = document.createElement("form");
-	form.method = "POST";
+	form.method = "GET";
 	form.action = "/result"; // result 페이지로 전송
 
 	const posInput = document.createElement("input");
